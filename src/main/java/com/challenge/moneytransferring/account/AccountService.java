@@ -1,10 +1,8 @@
 package com.challenge.moneytransferring.account;
 
-import com.challenge.moneytransferring.db.inmemory.Storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class AccountService {
@@ -17,7 +15,6 @@ public class AccountService {
         this.accountStorage = accountStorage;
     }
 
-//    public Account create(String number, BigDecimal amount) {
     public Account create(CreateAccountRequest request) {
         return accountStorage.create(request.getNumber(), request.getAmount());
     }

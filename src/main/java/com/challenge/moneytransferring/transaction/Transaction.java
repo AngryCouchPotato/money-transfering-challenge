@@ -8,48 +8,37 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     private long id;
-    private Account from;
-    private Account to;
+    private long from;
+    private long to;
     private BigDecimal amount;
     private LocalDateTime localDateTime;
+
+    public Transaction(long id, long from, long to, BigDecimal amount, LocalDateTime localDateTime) {
+        this.id = id;
+        this.from = from;
+        this.to = to;
+        this.amount = amount;
+        this.localDateTime = localDateTime;
+    }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Account getFrom() {
+    public long getFrom() {
         return from;
     }
 
-    public void setFrom(Account from) {
-        this.from = from;
-    }
-
-    public Account getTo() {
+    public long getTo() {
         return to;
-    }
-
-    public void setTo(Account to) {
-        this.to = to;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public LocalDateTime getLocalDateTime() {
         return localDateTime;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
-    }
 }

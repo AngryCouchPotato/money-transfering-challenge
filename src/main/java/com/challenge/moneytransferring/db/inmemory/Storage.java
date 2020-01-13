@@ -10,14 +10,14 @@ import java.util.concurrent.ConcurrentMap;
 
 public class Storage <T>  {
 
-    private ConcurrentMap<Long, T> concurrentMap;
+    private ConcurrentMap<Long, T> entitiesById;
 
     public Storage() {
-        this.concurrentMap = new ConcurrentHashMap<>();
+        this.entitiesById = new ConcurrentHashMap<>();
     }
 
     public Optional<T> find(Long id) {
-        return Optional.ofNullable(concurrentMap.get(id));
+        return Optional.ofNullable(entitiesById.get(id));
     }
 
     public T get(Long id) {
@@ -25,15 +25,15 @@ public class Storage <T>  {
     }
 
     public List<T> getAll() {
-        return new ArrayList<>(concurrentMap.values());
+        return new ArrayList<>(entitiesById.values());
     }
 
     public T put(Long id, T value) {
-        return concurrentMap.put(id, value);
+        return entitiesById.put(id, value);
     }
 
     public T remove(Long id) {
-        return concurrentMap.remove(id);
+        return entitiesById.remove(id);
     }
 
 }
