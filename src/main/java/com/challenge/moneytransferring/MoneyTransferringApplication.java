@@ -31,6 +31,7 @@ public class MoneyTransferringApplication {
         get(Path.Web.ACCOUNTS,  accountController.getAll(), json());
         post(Path.Web.ACCOUNTS, accountController.create(), json());
         get(Path.Web.ACCOUNT_BY_ID, accountController.get(), json());
+        get(Path.Web.ACCOUNT_BALANCCE, accountController.getBalance(), json());
         get(Path.Web.TRANSACTIONS_OF_ACCOUNT, accountController.getAllTransactions(), json());
         delete(Path.Web.ACCOUNT_BY_ID, accountController.delete(), json());
 

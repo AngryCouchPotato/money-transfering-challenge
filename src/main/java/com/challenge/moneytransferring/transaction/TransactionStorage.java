@@ -33,6 +33,19 @@ public class TransactionStorage extends Storage<Transaction> {
         return transactionsByAccountId.computeIfAbsent(accountId, k -> new ArrayList<>());
     }
 
+    public BigDecimal getBalance(long accountId) {
+        List<Transaction> transactions = transactionsByAccountId.get(accountId);
+        BigDecimal plus = transactions.stream()
+            .filter(transaction -> transaction.getTo() == accountId)
+            .map(transaction -> transaction.getAmount())
+            .reduce(new BigDecimal(0), (left, right) -> left.subtract(right));
+        BigDecimal minus = transactions.stream()
+            .filter(transaction -> transaction.getFrom() == accountId)
+            .map(transaction -> transaction.getAmount())
+            .reduce(new BigDecimal(0), (left, right) -> left.subtract(right));
+        return plus.subtract(minus);
+    }
+
     public long nextId() {
         return idCounter.incrementAndGet();
     }

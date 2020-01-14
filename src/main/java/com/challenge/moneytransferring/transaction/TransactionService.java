@@ -21,13 +21,11 @@ public class TransactionService {
         validateRequest(request);
         Account from = accountStorage.get(request.getFrom());
         Account to = accountStorage.get(request.getTo());
-        validateAccount(from, request.getAmount());
         synchronized ((from.getId() < to.getId() ? from : to)) {
-            synchronized ((from.getId() < to.getId() ? to : from)) {
-                from.setAmount(from.getAmount().subtract(request.getAmount()));
-                to.setAmount(to.getAmount().add(request.getAmount()));
-                return transactionStorage.create(from, to, request.getAmount());
-            }
+          synchronized ((from.getId() < to.getId() ? to : from)) {
+            validateAccount(from, request.getAmount());
+            return transactionStorage.create(from, to, request.getAmount());
+          }
         }
     }
 
@@ -43,6 +41,12 @@ public class TransactionService {
         return transactionStorage.getAll(accountId);
     }
 
+    public BigDecimal getBalance(Account account) {
+      synchronized (account) {
+        return transactionStorage.getBalance(account.getId());
+      }
+    }
+
     private void validateRequest(TransactionRequest request) {
         if (request.getFrom() == request.getTo()) {
             throw new InvalidTransactionRequestException(String.format("Accounts have to be different. base account = %d, destination account = %d", request.getFrom(), request.getTo()));
@@ -53,9 +57,8 @@ public class TransactionService {
     }
 
     private void validateAccount(Account from, BigDecimal amount) {
-        if(from.getAmount().compareTo(amount) < 0) {
+        if(getBalance(from).compareTo(amount) < 0) {
             throw new InvalidAccountBalanceException(String.format("Account with id = %d and number = %s doesn't contain enough money", from.getId(), from.getNumber()));
         }
     }
-
 }

@@ -28,6 +28,12 @@ public class AccountController {
         return (request, response) -> transactionService.getAll(getAndValidatedId(request));
     }
 
+    public Route getBalance() {
+        return (request, response) -> transactionService.getBalance(
+            accountService.get(getAndValidatedId(request))
+        );
+    }
+
     public Route create() {
         return (request, response) -> {
             CreateAccountRequest acr = Jsons.fromJson(request.body(), CreateAccountRequest.class);
