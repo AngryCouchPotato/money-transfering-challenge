@@ -3,6 +3,7 @@ package com.challenge.moneytransferring;
 import com.challenge.moneytransferring.account.AccountController;
 import com.challenge.moneytransferring.account.AccountService;
 import com.challenge.moneytransferring.account.AccountStorage;
+import com.challenge.moneytransferring.handler.ExceptionHandler;
 import com.challenge.moneytransferring.transaction.TransactionController;
 import com.challenge.moneytransferring.transaction.TransactionService;
 import com.challenge.moneytransferring.transaction.TransactionStorage;
@@ -17,14 +18,7 @@ public class MoneyTransferringApplication {
     private TransactionController transactionController;
 
     public MoneyTransferringApplication() {
-        initSpark();
         init();
-    }
-
-    private void initSpark() {
-        // Configure Spark
-        port(4567);
-//        staticFiles.expireTime(600L);
     }
 
     private void init() {
@@ -44,6 +38,7 @@ public class MoneyTransferringApplication {
         post(Path.Web.TRANSACTIONS, transactionController.create(), json());
         get(Path.Web.TRANSACTION_BY_ID, transactionController.get(), json());
 
+        exception(Exception.class, ExceptionHandler.handle());
     }
 
     public static void main(String[] args) {

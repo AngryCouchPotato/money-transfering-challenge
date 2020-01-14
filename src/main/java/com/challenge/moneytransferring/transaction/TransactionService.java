@@ -2,6 +2,8 @@ package com.challenge.moneytransferring.transaction;
 
 import com.challenge.moneytransferring.account.Account;
 import com.challenge.moneytransferring.account.AccountStorage;
+import com.challenge.moneytransferring.exception.InvalidAccountBalanceException;
+import com.challenge.moneytransferring.exception.InvalidTransactionRequestException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +21,7 @@ public class TransactionService {
         validateRequest(request);
         Account from = accountStorage.get(request.getFrom());
         Account to = accountStorage.get(request.getTo());
-        validateAmount(from, request.getAmount());
+        validateAccount(from, request.getAmount());
         synchronized ((from.getId() < to.getId() ? from : to)) {
             synchronized ((from.getId() < to.getId() ? to : from)) {
                 from.setAmount(from.getAmount().subtract(request.getAmount()));
@@ -43,16 +45,16 @@ public class TransactionService {
 
     private void validateRequest(TransactionRequest request) {
         if (request.getFrom() == request.getTo()) {
-            throw new IllegalArgumentException(String.format("Accounts have to be different. base account = %d, destination account = %d", request.getFrom(), request.getTo()));
+            throw new InvalidTransactionRequestException(String.format("Accounts have to be different. base account = %d, destination account = %d", request.getFrom(), request.getTo()));
+        }
+        if(request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidTransactionRequestException(String.format("Amount (%d) cannot be less or equals 0.", request.getAmount().doubleValue()));
         }
     }
 
-    private void validateAmount(Account from, BigDecimal amount) {
+    private void validateAccount(Account from, BigDecimal amount) {
         if(from.getAmount().compareTo(amount) < 0) {
-            throw new IllegalArgumentException(String.format("Account with id = %d and number = %s doesn't contain enough money", from.getId(), from.getNumber()));
-        }
-        if(amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException(String.format("Amount (%d) cannot be less or equals 0.", amount.doubleValue()));
+            throw new InvalidAccountBalanceException(String.format("Account with id = %d and number = %s doesn't contain enough money", from.getId(), from.getNumber()));
         }
     }
 
