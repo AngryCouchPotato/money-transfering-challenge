@@ -2,14 +2,14 @@ package com.challenge.moneytransferring.account;
 
 import java.math.BigDecimal;
 
-public class CreateAccountRequest {
+public class AccountCreationRequest {
     private String number;
     private BigDecimal amount;
 
-    public CreateAccountRequest() {
+    public AccountCreationRequest() {
     }
 
-    public CreateAccountRequest(String number, BigDecimal amount) {
+    public AccountCreationRequest(String number, BigDecimal amount) {
         this.number = number;
         this.amount = amount;
     }

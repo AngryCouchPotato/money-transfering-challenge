@@ -32,8 +32,4 @@ public class Storage <T>  {
         return entitiesById.put(id, value);
     }
 
-    public T remove(Long id) {
-        return entitiesById.remove(id);
-    }
-
 }

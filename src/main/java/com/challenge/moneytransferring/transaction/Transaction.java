@@ -1,7 +1,5 @@
 package com.challenge.moneytransferring.transaction;
 
-import com.challenge.moneytransferring.account.Account;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

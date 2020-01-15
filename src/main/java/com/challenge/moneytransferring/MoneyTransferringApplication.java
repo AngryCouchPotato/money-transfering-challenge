@@ -23,9 +23,10 @@ public class MoneyTransferringApplication {
 
     private void init() {
         AccountStorage accountStorage = new AccountStorage();
-        TransactionService transactionService = new TransactionService(accountStorage, new TransactionStorage());
+        TransactionStorage transactionStorage = new TransactionStorage();
+        TransactionService transactionService = new TransactionService(accountStorage, transactionStorage);
         
-        this.accountController = new AccountController(new AccountService(accountStorage), transactionService);
+        this.accountController = new AccountController(new AccountService(accountStorage, transactionStorage), transactionService);
         this.transactionController = new TransactionController(transactionService);
 
         get(Path.Web.ACCOUNTS,  accountController.getAll(), json());
@@ -33,7 +34,6 @@ public class MoneyTransferringApplication {
         get(Path.Web.ACCOUNT_BY_ID, accountController.get(), json());
         get(Path.Web.ACCOUNT_BALANCCE, accountController.getBalance(), json());
         get(Path.Web.TRANSACTIONS_OF_ACCOUNT, accountController.getAllTransactions(), json());
-        delete(Path.Web.ACCOUNT_BY_ID, accountController.delete(), json());
 
         get(Path.Web.TRANSACTIONS, transactionController.getAll(), json());
         post(Path.Web.TRANSACTIONS, transactionController.create(), json());
