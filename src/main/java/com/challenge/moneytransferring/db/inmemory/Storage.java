@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
-public class Storage <T>  {
+public abstract class Storage <T>  {
 
     private ConcurrentMap<Long, T> entitiesById;
+    private AtomicLong idCounter;
 
     public Storage() {
         this.entitiesById = new ConcurrentHashMap<>();
+        this.idCounter = new AtomicLong();
     }
 
     public Optional<T> find(Long id) {
@@ -30,6 +33,10 @@ public class Storage <T>  {
 
     public T put(Long id, T value) {
         return entitiesById.put(id, value);
+    }
+
+    public long nextId() {
+        return idCounter.incrementAndGet();
     }
 
 }

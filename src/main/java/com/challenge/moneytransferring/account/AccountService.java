@@ -22,7 +22,7 @@ public class AccountService {
     public Account create(AccountCreationRequest request) {
         Account account = accountStorage.create(request.getNumber());
         if(request.getAmount().compareTo(BigDecimal.ZERO) > 0) {
-          transactionStorage.create(accountStorage.get(1l), account, request.getAmount());
+          transactionStorage.create(Accounts.BASE_ACCOUNT_ID, account.getId(), request.getAmount());
         }
         return account;
     }

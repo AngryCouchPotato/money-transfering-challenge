@@ -22,7 +22,7 @@ public class TransactionService {
         synchronized ((from.getId() < to.getId() ? from : to)) {
           synchronized ((from.getId() < to.getId() ? to : from)) {
             validateAccount(from, request.getAmount());
-            return transactionStorage.create(from, to, request.getAmount());
+            return transactionStorage.create(from.getId(), to.getId(), request.getAmount());
           }
         }
     }
