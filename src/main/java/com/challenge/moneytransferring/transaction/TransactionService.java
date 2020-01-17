@@ -45,7 +45,7 @@ public class TransactionService {
       }
     }
 
-    private void validateAccount(Account from, BigDecimal amount) {
+    void validateAccount(Account from, BigDecimal amount) {
         if(getBalance(from).compareTo(amount) < 0) {
             throw new InvalidAccountBalanceException(String.format("Account with id = %d and number = %s doesn't contain enough money", from.getId(), from.getNumber()));
         }

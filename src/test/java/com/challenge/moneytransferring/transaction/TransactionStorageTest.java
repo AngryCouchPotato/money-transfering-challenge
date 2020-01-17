@@ -73,7 +73,7 @@ class TransactionStorageTest {
     }
 
     @Test
-    void getBalance() {
+    void shouldFailGetBalance() {
         // Given
         long second = 2L;
         long third = 3L;

@@ -38,7 +38,7 @@ public class TransactionStorage extends Storage<Transaction> {
     }
 
     public BigDecimal getBalance(long accountId) {
-        List<Transaction> transactions = transactionsByAccountId.get(accountId);
+        List<Transaction> transactions = getAll(accountId);
         BigDecimal plus = transactions.stream()
             .filter(transaction -> transaction.getTo() == accountId)
             .map(transaction -> transaction.getAmount())
