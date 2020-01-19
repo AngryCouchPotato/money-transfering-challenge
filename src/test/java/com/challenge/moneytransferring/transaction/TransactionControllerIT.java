@@ -1,7 +1,7 @@
   package com.challenge.moneytransferring.transaction;
 
-  import com.challenge.moneytransferring.IntegrationTest;
   import com.challenge.moneytransferring.account.AccountCreationRequest;
+  import com.challenge.moneytransferring.integration.IntegrationTest;
   import com.google.gson.reflect.TypeToken;
   import org.junit.jupiter.api.*;
 
@@ -15,7 +15,7 @@
   import static org.junit.jupiter.api.Assertions.*;
 
   @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-  class TransactionControllerIntegrationTest extends IntegrationTest {
+  class TransactionControllerIT extends IntegrationTest {
 
       @BeforeAll
       private static void init() {

@@ -40,9 +40,7 @@ public class TransactionService {
     }
 
     public BigDecimal getBalance(Account account) {
-      synchronized (account) {
         return transactionStorage.getBalance(account.getId());
-      }
     }
 
     void validateAccount(Account from, BigDecimal amount) {

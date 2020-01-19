@@ -8,9 +8,6 @@ public class TransactionRequest {
     private long to;
     private BigDecimal amount;
 
-    public TransactionRequest() {
-    }
-
     public TransactionRequest(long from, long to, BigDecimal amount) {
         this.from = from;
         this.to = to;
@@ -21,23 +18,20 @@ public class TransactionRequest {
         return from;
     }
 
-    public void setFrom(long from) {
-        this.from = from;
-    }
-
     public long getTo() {
         return to;
-    }
-
-    public void setTo(long to) {
-        this.to = to;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    @Override
+    public String toString() {
+        return "TransactionRequest{" +
+            "from=" + from +
+            ", to=" + to +
+            ", amount=" + amount +
+            '}';
     }
 }

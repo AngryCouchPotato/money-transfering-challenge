@@ -1,6 +1,6 @@
 package com.challenge.moneytransferring.account;
 
-import com.challenge.moneytransferring.IntegrationTest;
+import com.challenge.moneytransferring.integration.IntegrationTest;
 import com.challenge.moneytransferring.transaction.Transaction;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.MethodOrderer;
@@ -17,7 +17,7 @@ import static com.challenge.moneytransferring.util.Path.Web.TRANSACTIONS;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class AccountControllerIntegrationTest extends IntegrationTest {
+class AccountControllerIT extends IntegrationTest {
 
     @Test
     @Order(1)

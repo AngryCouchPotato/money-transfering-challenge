@@ -1,5 +1,6 @@
-package com.challenge.moneytransferring;
+package com.challenge.moneytransferring.integration;
 
+import com.challenge.moneytransferring.MoneyTransferringApplication;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import spark.Spark;
@@ -16,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 public abstract class IntegrationTest {
 
     @BeforeAll
-    public static void setUp() {
+    public static void setUp() throws InterruptedException {
+        Thread.sleep(1000);// It is not the best solution, but I need this delay when I run all tests
         MoneyTransferringApplication.main(null);
     }
 

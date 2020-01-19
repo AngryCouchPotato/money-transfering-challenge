@@ -6,9 +6,6 @@ public class AccountCreationRequest {
     private String number;
     private BigDecimal amount;
 
-    public AccountCreationRequest() {
-    }
-
     public AccountCreationRequest(String number, BigDecimal amount) {
         this.number = number;
         this.amount = amount;
@@ -18,15 +15,8 @@ public class AccountCreationRequest {
         return number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 }

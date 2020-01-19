@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.challenge.moneytransferring.util.Loggers.format;
 
@@ -27,14 +27,19 @@ public class TransactionStorage extends Storage<Transaction> {
     public Transaction create(long fromAccountId, long toAccountId, BigDecimal amount) {
         Transaction transaction = new Transaction(nextId(), fromAccountId, toAccountId, amount, LocalDateTime.now());
         put(transaction.getId(), transaction);
-        transactionsByAccountId.computeIfAbsent(fromAccountId, k -> new ArrayList<>()).add(transaction);
-        transactionsByAccountId.computeIfAbsent(toAccountId, k -> new ArrayList<>()).add(transaction);
+        transactionsByAccountId
+            .computeIfAbsent(fromAccountId, k -> new CopyOnWriteArrayList<>())
+            .add(transaction);
+        transactionsByAccountId
+            .computeIfAbsent(toAccountId, k -> new CopyOnWriteArrayList<>())
+            .add(transaction);
         logger.info(format("Transaction was created. From account {} to account {} with amount {}", fromAccountId, toAccountId, amount));
         return transaction;
     }
 
     public List<Transaction> getAll(long accountId) {
-        return transactionsByAccountId.computeIfAbsent(accountId, k -> new ArrayList<>());
+        return transactionsByAccountId
+            .computeIfAbsent(accountId, k -> new CopyOnWriteArrayList<>());
     }
 
     public BigDecimal getBalance(long accountId) {
