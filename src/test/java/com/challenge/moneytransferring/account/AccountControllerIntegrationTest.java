@@ -1,35 +1,23 @@
 package com.challenge.moneytransferring.account;
 
-import com.challenge.moneytransferring.MoneyTransferringApplication;
+import com.challenge.moneytransferring.IntegrationTest;
 import com.challenge.moneytransferring.transaction.Transaction;
 import com.google.gson.reflect.TypeToken;
-import org.junit.jupiter.api.*;
-import spark.Spark;
-import spark.utils.IOUtils;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 import static com.challenge.moneytransferring.util.Jsons.*;
+import static com.challenge.moneytransferring.util.Path.Web.ACCOUNTS;
+import static com.challenge.moneytransferring.util.Path.Web.TRANSACTIONS;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class AccountControllerIntegrationTest {
-
-    @BeforeAll
-    public static void setUp() {
-        MoneyTransferringApplication.main(null);
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        Spark.stop();
-    }
+class AccountControllerIntegrationTest extends IntegrationTest {
 
     @Test
     @Order(1)
@@ -40,7 +28,7 @@ class AccountControllerIntegrationTest {
         AccountCreationRequest request = new AccountCreationRequest(number, amount);
 
         // When
-        TestResponse response = post("/accounts", toJson(request));
+        TestResponse response = post(ACCOUNTS, toJson(request));
 
         // Then
         Account account = fromJson(response.body, Account.class);
@@ -59,7 +47,7 @@ class AccountControllerIntegrationTest {
         AccountCreationRequest request = new AccountCreationRequest(number, amount);
 
         // When
-        TestResponse response = post("/accounts", toJson(request));
+        TestResponse response = post(ACCOUNTS, toJson(request));
 
         // Then
         Account account = fromJson(response.body, Account.class);
@@ -70,6 +58,41 @@ class AccountControllerIntegrationTest {
     }
 
     @Test
+    @Order(2)
+    void shouldFailCreateNewAccountWithBlankAccountNumber() {
+        // Given
+        String number = "";
+        BigDecimal amount = new BigDecimal(100);
+        AccountCreationRequest request = new AccountCreationRequest(number, amount);
+
+        // When
+        TestResponse response = post(ACCOUNTS, toJson(request));
+
+        // Then
+        assertEquals(400, response.status);
+        assertEquals("Bad Request", response.message);
+        assertNull(response.body);
+    }
+
+    @Test
+    @Order(2)
+    void shouldFailCreateNewAccountWithNegativeAmount() {
+        // Given
+        String number = "Fourth";
+        BigDecimal amount = new BigDecimal(-100);
+        AccountCreationRequest request = new AccountCreationRequest(number, amount);
+
+        // When
+        TestResponse response = post(ACCOUNTS, toJson(request));
+
+        // Then
+        assertEquals(400, response.status);
+        assertEquals("Bad Request", response.message);
+        assertNull(response.body);
+    }
+
+
+    @Test
     @Order(3)
     void shouldGetAccount() {
         // Given
@@ -77,7 +100,7 @@ class AccountControllerIntegrationTest {
         long id = 2;
 
         // When
-        TestResponse response = get("/accounts/" + id);
+        TestResponse response = get(ACCOUNTS + "/" + id);
 
         // Then
         Account account = fromJson(response.body, Account.class);
@@ -93,7 +116,7 @@ class AccountControllerIntegrationTest {
         long id = 777L;
 
         // When
-        TestResponse response = get("/accounts/" + id);
+        TestResponse response = get(ACCOUNTS + "/" + id);
 
         // Then
         assertEquals(404, response.status);
@@ -105,7 +128,7 @@ class AccountControllerIntegrationTest {
     @Order(5)
     void shouldGetAllAccounts() {
         // When
-        TestResponse response = get("/accounts");
+        TestResponse response = get(ACCOUNTS);
 
         // Then
         List<Account> accounts = fromJson(response.body, new TypeToken<List<Account>>(){}.getType());
@@ -121,7 +144,7 @@ class AccountControllerIntegrationTest {
         long id = 2;
 
         // When
-        TestResponse response = get("/accounts/" + id + "/transactions");
+        TestResponse response = get(ACCOUNTS + "/" + id + TRANSACTIONS);
 
         // Then
         List<Transaction> transactions = fromJson(response.body, new TypeToken<List<Transaction>>(){}.getType());
@@ -136,10 +159,9 @@ class AccountControllerIntegrationTest {
         long id = 3;
 
         // When
-        TestResponse response = get("/accounts/" + id + "/transactions");
+        TestResponse response = get(ACCOUNTS + "/" + id + TRANSACTIONS);
 
         // Then
-//        List<Transaction> transactions = objects(response.body);
         List<Transaction> transactions = fromJson(response.body, new TypeToken<List<Transaction>>(){}.getType());
         assertEquals(200, response.status);
         assertNotNull(transactions);
@@ -154,64 +176,12 @@ class AccountControllerIntegrationTest {
         double expectedBalance = 100;
 
         // When
-        TestResponse response = get("/accounts/" + id + "/balance");
+        TestResponse response = get(ACCOUNTS + "/" + id + "/balance");
 
         // Then
         Double balance = object(response.body);
         assertEquals(200, response.status);
         assertNotNull(balance);
         assertEquals(expectedBalance, balance);
-    }
-
-    private TestResponse get(String path) {
-        return request("GET", path, null);
-    }
-
-    private TestResponse post(String path, String json) {
-        return request("POST", path, json);
-    }
-
-    private TestResponse request(String method, String path, String json) {
-        try {
-            URL url = new URL("http://localhost:4567" + path);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setRequestMethod(method);
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-Type", "application/json");
-
-            if(json != null){
-                OutputStream os = connection.getOutputStream();
-                OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
-                osw.write(json);
-                osw.flush();
-                osw.close();
-                os.close();
-            }
-
-            connection.connect();
-            if(connection.getResponseCode() == 404){
-                return new TestResponse(connection.getResponseCode(), connection.getResponseMessage(), null);
-            }
-            String body = IOUtils.toString(connection.getInputStream());
-            return new TestResponse(connection.getResponseCode(), connection.getResponseMessage(), body);
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Sending request failed: " + e.getMessage());
-            return null;
-        }
-    }
-
-    private static class TestResponse {
-
-        public final String body;
-        public final String message;
-        public final int status;
-
-        public TestResponse(int status, String message, String body) {
-            this.status = status;
-            this.message = message;
-            this.body = body;
-        }
     }
 }

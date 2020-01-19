@@ -44,7 +44,7 @@ public class TransactionController {
             throw new InvalidTransactionRequestException(String.format("Accounts have to be different. base account = %d, destination account = %d", request.getFrom(), request.getTo()));
         }
         if(request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidTransactionRequestException(String.format("Amount (%d) cannot be less or equals 0.", request.getAmount().doubleValue()));
+            throw new InvalidTransactionRequestException(String.format("Amount (%s) cannot be less or equals 0.", request.getAmount()));
         }
     }
 }
