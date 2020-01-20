@@ -1,6 +1,6 @@
 package com.challenge.moneytransferring.db.inmemory;
 
-import com.challenge.moneytransferring.exception.EntityNotFountException;
+import com.challenge.moneytransferring.exception.EntityNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public abstract class Storage <T>  {
     }
 
     public T get(Long id) {
-        return find(id).orElseThrow(() -> new EntityNotFountException(String.format("Could not find Entity with id = %d", id), id));
+        return find(id).orElseThrow(() -> new EntityNotFoundException(String.format("Could not find Entity with id = %d", id), id));
     }
 
     public List<T> getAll() {

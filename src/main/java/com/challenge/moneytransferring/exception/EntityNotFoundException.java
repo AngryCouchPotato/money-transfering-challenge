@@ -1,9 +1,9 @@
 package com.challenge.moneytransferring.exception;
 
-public class EntityNotFountException extends RuntimeException {
+public class EntityNotFoundException extends RuntimeException {
     private long id;
 
-    public EntityNotFountException(String message, long id) {
+    public EntityNotFoundException(String message, long id) {
         super(message);
         this.id = id;
     }

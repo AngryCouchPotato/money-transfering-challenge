@@ -1,6 +1,6 @@
 package com.challenge.moneytransferring.handler;
 
-import com.challenge.moneytransferring.exception.EntityNotFountException;
+import com.challenge.moneytransferring.exception.EntityNotFoundException;
 import com.challenge.moneytransferring.exception.InvalidAccountBalanceException;
 import com.challenge.moneytransferring.exception.InvalidAccountCreationRequestException;
 import com.challenge.moneytransferring.exception.InvalidTransactionRequestException;
@@ -27,7 +27,7 @@ public class ExceptionHandler {
       statusCode = 400;
     } else if (e instanceof InvalidTransactionRequestException) {
       statusCode = 400;
-    } else if (e instanceof EntityNotFountException) {
+    } else if (e instanceof EntityNotFoundException) {
       statusCode = 404;
     } else if (e instanceof InvalidAccountBalanceException) {
       statusCode = 422;

@@ -1,7 +1,7 @@
 package com.challenge.moneytransferring.transaction;
 
 import com.challenge.moneytransferring.account.*;
-import com.challenge.moneytransferring.exception.EntityNotFountException;
+import com.challenge.moneytransferring.exception.EntityNotFoundException;
 import com.challenge.moneytransferring.exception.InvalidAccountBalanceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,7 +75,7 @@ class TransactionServiceTest {
       long id = 777L;
 
       // When
-      Throwable exception = assertThrows(EntityNotFountException.class, () -> transactionService.get(id));
+      Throwable exception = assertThrows(EntityNotFoundException.class, () -> transactionService.get(id));
 
       // Then
       assertEquals("Could not find Entity with id = 777", exception.getMessage());
