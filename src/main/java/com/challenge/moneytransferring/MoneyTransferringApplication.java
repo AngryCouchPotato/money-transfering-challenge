@@ -40,6 +40,7 @@ public class MoneyTransferringApplication {
         get(Path.Web.TRANSACTION_BY_ID, transactionController.get(), json());
 
         exception(Exception.class, ExceptionHandler.handle());
+        after((req, res) -> res.type("application/json"));
     }
 
     public static void main(String[] args) {

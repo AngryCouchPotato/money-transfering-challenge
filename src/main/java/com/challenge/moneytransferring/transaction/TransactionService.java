@@ -32,7 +32,9 @@ public class TransactionService {
     }
 
     public List<Transaction> getAll() {
-        return transactionStorage.getAll();
+        List<Transaction> transactions = transactionStorage.getAll();
+        transactions.sort((o1, o2) -> o1.getLocalDateTime().compareTo(o2.getLocalDateTime()));
+        return transactions;
     }
 
     public List<Transaction> getAll(long accountId) {
