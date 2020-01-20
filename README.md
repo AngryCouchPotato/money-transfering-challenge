@@ -10,15 +10,15 @@ money transfers between accounts.
 - dependency injection through Constructor(in plan to add GoogleGuice)
 
 ## Endpoints
-GET  /accounts
-POST /accounts
-GET  /accounts/:id
-GET  /accounts/:id/balance
-GET  /accounts/:id/transactions
+    GET  /accounts
+    POST /accounts
+    GET  /accounts/:id
+    GET  /accounts/:id/balance
+    GET  /accounts/:id/transactions
 
-GET  /transactions
-POST /transactions
-GET  /transactions/:id
+    GET  /transactions
+    POST /transactions
+    GET  /transactions/:id
 
 ## Build
     mvn clean package
