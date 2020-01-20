@@ -1,15 +1,15 @@
-##Backend Test
+## Backend Test
 
 Design and implement a RESTful API (including data model and the backing implementation) for
 money transfers between accounts.
 
-##Libraries:
+## Libraries:
 - com.sparkjava:spark-core
 - com.google.code.gson:gson
 - ConcurrentHashMap as inMemory storage
 - dependency injection through Constructor(in plan to add GoogleGuice)
 
-##Endpoints
+## Endpoints
 GET  /accounts
 POST /accounts
 GET  /accounts/:id
