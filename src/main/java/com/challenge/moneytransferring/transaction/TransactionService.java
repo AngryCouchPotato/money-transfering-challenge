@@ -5,6 +5,7 @@ import com.challenge.moneytransferring.account.AccountStorage;
 import com.challenge.moneytransferring.exception.InvalidAccountBalanceException;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
 public class TransactionService {
@@ -33,7 +34,7 @@ public class TransactionService {
 
     public List<Transaction> getAll() {
         List<Transaction> transactions = transactionStorage.getAll();
-        transactions.sort((o1, o2) -> o1.getLocalDateTime().compareTo(o2.getLocalDateTime()));
+        transactions.sort(Comparator.comparing(Transaction::getLocalDateTime));
         return transactions;
     }
 
